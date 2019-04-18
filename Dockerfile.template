@@ -1,0 +1,17 @@
+FROM balenalib/%%RESIN_MACHINE_NAME%%-python:3.7-buster-build
+
+RUN install_packages libcairo2-dev libgirepository1.0-dev libmm-glib-dev
+
+WORKDIR /usr/src/app
+
+COPY requirements.txt requirements.txt
+
+RUN pip install --upgrade pip
+
+RUN pip install -r requirements.txt
+
+COPY toby-l2.py toby-l2.py
+
+ENV DBUS_SYSTEM_BUS_ADDRESS unix:path=/host/run/dbus/system_bus_socket
+
+CMD ["python", "-u", "toby-l2.py"]
